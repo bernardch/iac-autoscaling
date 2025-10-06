@@ -45,7 +45,7 @@ The application is reachable via the Load Balancer's DNS Name.
 
 To trigger auto-scaling out (scale up), visit the Load Balancer's /burn route (i.e. python-lb-1497354134.us-west-2.elb.amazonaws.com/burn) This will time out on the web page; this is expected. Check the logs to see that the route has been triggered.
 
-You can check the Python Docker image to see that this route will simulate CPU load, which should cause the service to automatically scale up for the next few minutes (to the max of 3 tasks, as we have configured 3 EC2 instances max). NOTE THAT THIS WILL TAKE A FEW MINUTES TO BE TRIGGERED!
+You can check the Python Docker image to see that this route will simulate CPU load, which should cause the service to automatically scale up for the next few minutes (to the max of 3 tasks, as we have configured 3 EC2 instances max). NOTE THAT THIS WILL TAKE A FEW MINUTES TO BE TRIGGERED! (5-10 minutes)
 
 CloudWatch: Logs from the application are accessible from CloudWatch at the defined `logs_group` variable path.
 
