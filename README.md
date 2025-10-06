@@ -43,7 +43,7 @@ New cluster, containing a new autoscaling enabled service, which contains tasks 
 New instances are used as Container instance "infrastructure" in ECS, deployed via Launch Template and Auto Scaling Groups.
 The application is reachable via the Load Balancer's DNS Name. 
 
-To trigger auto-scaling out (scale up), visit the Load Balancer's /burn route (i.e. python-lb-1497354134.us-west-2.elb.amazonaws.com/burn) This will time out on the web page; this is expected. Check the logs to see that the route has been triggered.
+To trigger auto-scaling out (scale up), visit the Load Balancer's /burn route (i.e. python-lb-1497354134.us-west-2.elb.amazonaws.com/burn) This will time out on the web page; this is expected. Check the logs to see that the route has been triggered. Just be careful of triggering the burn route multiple times, as this will cause the app to stay scaled up for some time.
 
 You can check the Python Docker image to see that this route will simulate CPU load, which should cause the service to automatically scale up for the next few minutes (to the max of 3 tasks, as we have configured 3 EC2 instances max). NOTE THAT THIS WILL TAKE A FEW MINUTES TO BE TRIGGERED! (5-10 minutes)
 
@@ -60,11 +60,3 @@ terraform destroy
 For this short demo, we simulate CPU load to cause the application (ECS Service) to automatically scale in and out. This autoscaling only affects tasks, not the EC2 instances.
 
 If given more time, we can further optimize by adding auto-scaling to our EC2 instances, either via traditional ASG auto-scaling policies based on Cloudwatch metrics or through the newer Capacity Provider integration with ECS. The decision was made deliberately to implement this with EC2 instances instead of Fargate so that we have direct access and control over our underlying EC2 infrastructure. Additional services could also be added to show auto-scaling on an individual application-level basis. 
-
-
-
-
-## AI Assistance Policy
-ChatGPT was used for general questions and to generate base boilerplate code for Terraform configuration.
-Basic prompt: "Please generate basic boilerplate code for an ECS cluster on AWS". From this prompt, I then modified it to include other required services and to fit the purpose of demo-ing an auto-scaling application deployed on AWS using EC2 Instances as ECS Cluster Infrastructure. 
-AI-produced c ode was manually reviewed and tested after deployment to an AWS account.
