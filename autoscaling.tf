@@ -21,7 +21,7 @@ resource "aws_appautoscaling_policy" "scale_in" {
   service_namespace  = aws_appautoscaling_target.ecs_service[each.key].service_namespace
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 50.0 # Lower target CPU utilization (20%)
+    target_value       = 20.0 # Lower target CPU utilization (20%)
     scale_in_cooldown  = 60
     scale_out_cooldown = 60
 

@@ -37,7 +37,7 @@ A new cluster will be provisioned, viewable through the AWS Console. This cluste
 
 #### Observe: 
 ##### ECS: 
-New cluster, containing a new autoscaling enabled service, which contains tasks - each corresponding to the Python image we built earlier.
+New cluster, containing a new autoscaling enabled service, which contains tasks - each corresponding to the Python image we built earlier. The cluster should launch with 3 tasks, which slowly auto-scale down as CPU Utilization is lower than configured auto-scaling policy.
 
 ##### EC2: 
 New instances are used as Container instance "infrastructure" in ECS, deployed via Launch Template and Auto Scaling Groups.
