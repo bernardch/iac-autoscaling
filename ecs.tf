@@ -8,9 +8,9 @@ resource "aws_ecs_cluster" "my_cluster" {
 
 resource "aws_ecs_task_definition" "python" {
   family                   = "python"
-  network_mode             = "bridge"
-  cpu                      = "1024"
-  memory                   = "512"
+  network_mode             = "awsvpc"
+  cpu                      = "500"
+  memory                   = "200"
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 
@@ -19,12 +19,11 @@ resource "aws_ecs_task_definition" "python" {
       name      = "python"
       image     = var.python_ecr_repository_url
       essential = true
-      cpu       = 1024
-      memory    = 512
+      cpu       = 500
+      memory    = 200
       portMappings = [
         {
           containerPort = 5000
-          hostPort      = 5000
           protocol      = "tcp"
         },
       ]
@@ -51,6 +50,11 @@ resource "aws_ecs_service" "python_service" {
   launch_type          = "EC2"
   desired_count        = 1
   force_new_deployment = true
+  network_configuration {
+		subnets          = module.vpc.private_subnets
+		security_groups  = [aws_security_group.ecs_sg.id]
+		assign_public_ip = false
+	}
   load_balancer {
     target_group_arn = aws_lb_target_group.python_tg.arn
     container_name   = "python"
@@ -59,4 +63,5 @@ resource "aws_ecs_service" "python_service" {
   tags = {
     Name = "terraform-demo"
   }
+  depends_on = [aws_lb.python_lb]
 }

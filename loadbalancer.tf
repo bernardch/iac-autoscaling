@@ -14,7 +14,7 @@ resource "aws_lb_target_group" "python_tg" {
   port        = 5000
   protocol    = "HTTP"
   vpc_id      = module.vpc.vpc_id
-  target_type = "instance"
+  target_type = "ip"
   tags = {
     Name = "terraform-demo"
   }
