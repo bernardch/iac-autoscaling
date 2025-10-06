@@ -37,7 +37,7 @@ A new cluster will be provisioned, viewable through the AWS Console. This cluste
 
 #### Observe: 
 ##### ECS: 
-New cluster, containing a new autoscaling enabled service, which contains tasks - each corresponding to the Python image we built earlier. The cluster should launch with 3 tasks, which slowly auto-scale down as CPU Utilization is lower than configured auto-scaling policy.
+New cluster, containing a new autoscaling enabled service, which contains tasks - each corresponding to the Python image we built earlier.
 
 ##### EC2: 
 New instances are used as Container instance "infrastructure" in ECS, deployed via Launch Template and Auto Scaling Groups.
@@ -59,4 +59,6 @@ terraform destroy
 ## Review
 For this short demo, we simulate CPU load to cause the application (ECS Service) to automatically scale in and out. This autoscaling only affects tasks, not the EC2 instances.
 
-If given more time, we can further optimize by adding auto-scaling to our EC2 instances, either via traditional ASG auto-scaling policies based on Cloudwatch metrics or through the newer Capacity Provider integration with ECS. The decision was made deliberately to implement this with EC2 instances instead of Fargate so that we have direct access and control over our underlying EC2 infrastructure. Additional services could also be added to show auto-scaling on an individual application-level basis. 
+
+
+If given more time, we can further optimize by adding auto-scaling to our EC2 instances, either via traditional ASG auto-scaling policies based on Cloudwatch metrics or through the newer Capacity Provider integration with ECS. The decision was made deliberately to implement this with EC2 instances instead of Fargate so that we have direct access and control over our underlying EC2 infrastructure. Additional services could also be added to show auto-scaling on an individual application-level basis. With only 3 tasks and 3 EC2 instances, it can be difficult to see the auto-scaling work quickly; more time could be spent to optimize / increase the amount of tasks such that our scale-in policies trigger more frequently.
