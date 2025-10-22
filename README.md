@@ -21,7 +21,7 @@ aws ecr get-login-password --region <REGION> | docker login --username AWS --pas
 ```
 Build and push Python flask image
 ```bash
-docker build <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/<IMAGE-NAME>:latest --push ./
+docker build -t <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/<IMAGE-NAME>:latest --push ./
 ```
 
 ## Build ECS infrastructure
