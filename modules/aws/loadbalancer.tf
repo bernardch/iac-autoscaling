@@ -5,7 +5,7 @@ resource "aws_lb" "python_lb" {
   security_groups    = [aws_security_group.alb_sg.id]
   load_balancer_type = "application"
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 
@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "python_tg" {
   vpc_id      = module.vpc.vpc_id
   target_type = "ip"
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_lb_listener" "python_listener" {
     target_group_arn = aws_lb_target_group.python_tg.arn
   }
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
   depends_on = [aws_lb_listener.python_listener]
 }

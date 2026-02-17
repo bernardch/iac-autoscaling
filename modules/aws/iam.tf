@@ -16,7 +16,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
     ]
   })
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
@@ -43,7 +43,7 @@ resource "aws_iam_policy" "ecs_logging_policy" {
     ]
   })
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 resource "aws_iam_role_policy_attachment" "ecs_logging_policy_attachment" {
@@ -65,7 +65,7 @@ resource "aws_iam_role" "ecs_instance_role" {
     }]
   })
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 resource "aws_iam_role_policy_attachment" "ecs_instance_role_attach" {

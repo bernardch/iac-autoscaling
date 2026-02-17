@@ -2,7 +2,7 @@
 resource "aws_ecs_cluster" "my_cluster" {
   name = var.cluster_name
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_ecs_task_definition" "python" {
     }
   ])
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 
@@ -61,7 +61,7 @@ resource "aws_ecs_service" "python_service" {
     container_port   = 5000
   }
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
   depends_on = [aws_lb.python_lb]
 }

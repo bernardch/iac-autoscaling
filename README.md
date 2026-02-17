@@ -41,7 +41,7 @@ New cluster, containing a new autoscaling enabled service, which contains tasks 
 
 ##### EC2: 
 New instances are used as Container instance "infrastructure" in ECS, deployed via Launch Template and Auto Scaling Groups.
-The application is reachable via the Load Balancer's DNS Name. 
+The application is reachable via the Load Balancer's DNS Name. (Check Outputs, or grab via console)
 
 To trigger auto-scaling out (scale up), visit the Load Balancer's /burn route (i.e. python-lb-1497354134.us-west-2.elb.amazonaws.com/burn) This will time out on the web page; this is expected. Check the logs to see that the route has been triggered. Just be careful of triggering the burn route multiple times, as this will cause the app to stay scaled up for some time.
 

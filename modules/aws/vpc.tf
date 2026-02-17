@@ -13,6 +13,6 @@ module "vpc" {
   enable_dns_hostnames    = true
   map_public_ip_on_launch = true
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }

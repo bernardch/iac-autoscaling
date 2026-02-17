@@ -16,7 +16,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }
 
@@ -38,6 +38,6 @@ resource "aws_security_group" "ecs_sg" {
   }
 
   tags = {
-    Name = "terraform-demo"
+    Name = var.project_name
   }
 }

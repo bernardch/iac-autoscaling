@@ -4,8 +4,8 @@ data "aws_ssm_parameter" "ecs_ami" {
 
 resource "aws_appautoscaling_target" "ecs_service" {
   for_each           = toset(local.services)
-  max_capacity       = 3
-  min_capacity       = 1
+  max_capacity       = var.max_size
+  min_capacity       = var.min_size
   resource_id        = "service/${var.cluster_name}/${each.key}-service"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -21,7 +21,7 @@ resource "aws_appautoscaling_policy" "scale_in" {
   service_namespace  = aws_appautoscaling_target.ecs_service[each.key].service_namespace
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 30.0 # Lower target CPU utilization (20%)
+    target_value       = var.scale_target_value # Lower target CPU utilization (20%)
     scale_in_cooldown  = 60
     scale_out_cooldown = 60
 
@@ -34,7 +34,7 @@ resource "aws_appautoscaling_policy" "scale_in" {
 resource "aws_launch_template" "ecs_lt" {
   name_prefix   = "ecs-instance"
   image_id      = data.aws_ssm_parameter.ecs_ami.value
-  instance_type = "t3.micro"
+  instance_type = var.instance_type
   iam_instance_profile {
     name = aws_iam_instance_profile.ecs_instance_profile.name
   }
@@ -47,9 +47,9 @@ resource "aws_launch_template" "ecs_lt" {
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
-  desired_capacity    = 3
-  max_size            = 3
-  min_size            = 1
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_size
+  min_size            = var.min_size
   vpc_zone_identifier = module.vpc.private_subnets
   launch_template {
     id      = aws_launch_template.ecs_lt.id
