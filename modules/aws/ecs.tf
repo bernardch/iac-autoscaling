@@ -1,3 +1,8 @@
+# -=*=-
+# ecs cluster: create new ecs cluster
+# aws ecs task definition: define task to be deployed within ecs:service:task
+# aws ecs service definition: define service to be deployed within ecs:service:task
+# -=*=-
 
 resource "aws_ecs_cluster" "my_cluster" {
   name = var.cluster_name

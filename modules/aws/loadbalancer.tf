@@ -1,3 +1,9 @@
+# -=*=-
+# loadbalancer for ecs service
+# target group forward incoming requests to ecs service via port 5000
+# listener to link loadbalancer to target group (forward from port 80)
+# -=*=-
+
 resource "aws_lb" "python_lb" {
   name               = "python-lb"
   internal           = false

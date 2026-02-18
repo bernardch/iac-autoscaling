@@ -1,3 +1,11 @@
+# -=*=-
+# ssm data: points to recommended image id
+# autoscaling target:  Specify scaling service target and range
+# autoscaling policy: Specify policy for when to scale service
+# aws launch template: How to launch new instances (EC2) when scaling up
+# aws autoscaling group: Group together EC2 instances to be scaled together
+# -=*=-
+
 data "aws_ssm_parameter" "ecs_ami" {
   name = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
 }

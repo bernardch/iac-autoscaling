@@ -10,6 +10,15 @@ Commands will be provided; please replace any ```<TAG>``` with relevant informat
 
 Be sure to update the variables in the `dev.tfvars` file as well!!
 
+### Which cloud to deploy (AWS vs Azure)
+
+Use the **`cloud`** variable to deploy either AWS or Azure. Only one is active per apply.
+
+- **AWS:** `terraform apply -var="cloud=aws" -var-file="dev.aws.tfvars"`
+- **Azure:** `terraform apply -var="cloud=azure" -var-file="dev.azure.tfvars"`
+
+You can also set `cloud = "aws"` or `cloud = "azure"` inside your tfvars file. Valid values are `"aws"` and `"azure"` only.
+
 ### Build and push docker images
 A basic Python flask app has been provided in the ./docker-python directory. 
 
@@ -24,12 +33,12 @@ Build and push Python flask image
 docker build -t <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/<IMAGE-NAME>:latest --push ./
 ```
 
-## Build ECS infrastructure
+## Build ECS infrastructure (AWS)
 
-Update the variables in dev.tfvars to fit your own environment.
+Update the variables in `dev.aws.tfvars` to fit your own environment, then:
 
 ```bash
-terraform apply -var-file="dev.tfvars"
+terraform apply -var="cloud=aws" -var-file="dev.aws.tfvars"
 ```
 
 ## Live application can be inspected through AWS Console
@@ -50,6 +59,39 @@ You can check the Python Docker image to see that this route will simulate CPU l
 CloudWatch: Logs from the application are accessible from CloudWatch at the defined `logs_group` variable path.
 
 Feel free to adjust/tweak numbers in each resource to your liking!
+
+---
+
+## Azure: Container Apps on VMSS (Dedicated workload profile)
+
+The Azure module runs **Container Apps on a Dedicated workload profile**, which uses **VMSS** under the hood—analogous to ECS on EC2:
+
+- **Minimal VMSS instances** by default (e.g. `min_size = 1`).
+- When the container app **scales up** (more replicas / CPU load), the platform **provisions more VMSS instances** as needed, up to `max_size`.
+
+| AWS | Azure |
+|-----|--------|
+| ECS cluster | Container Apps Environment |
+| EC2 ASG | Dedicated workload profile (VMSS) |
+| ECS service + Application Auto Scaling | Container App + CPU scale rule |
+
+### Deploy
+
+1. Set **`azure_acr_id`** and **`azure_acr_login_server`** (and optionally other vars) in `dev.azure.tfvars`.
+2. **Dedicated profile quota:** The subscription must have non-zero quota for **Dedicated workload profile** cores. If you see `WorkloadProfileMaximumCoresConstraint: maximum cores ... cannot be more than 0`, request an increase: **Portal → Subscription → Usage + quotas** → search "Container Apps" or "Microsoft.App" → increase the **Dedicated workload profile** (cores) quota. See [Container Apps quotas](https://learn.microsoft.com/en-us/azure/container-apps/quotas).
+3. Apply:
+   ```bash
+   terraform apply -var-file="dev.azure.tfvars"
+   ```
+4. Use the **`app_url`** output (e.g. `https://...`) and `/burn` to trigger CPU load and scaling.
+
+### How to check base image and container runtime (Azure)
+
+- **Image in use**: Container App → **Containers** in the portal, or Terraform: `container_image` in `modules/azure/main.tf`.
+- **Base image**: Your **Dockerfile** (e.g. `FROM python:3.11-slim`) or `docker history <acr-image>` locally.
+- **Runtime**: Dedicated profile runs on **VMSS** (containerd). In the portal: Container Apps Environment → **Workload profiles** → your Dedicated profile → instance count and details.
+
+---
 
 ## Clean Up ECS infrastructure
 ```

@@ -1,3 +1,9 @@
+# -=*=-
+# aws iam role: required role for ecs container to access AWS services
+# aws iam role policy attachment: attach ECSTaskExecutionRolePolicy to ecs task execution role (above)
+# ecs logging policy: Allow ecs tasks to send logs to cloudwatch
+# ecs instance role: required role for ecs to access ec2 instances
+# -=*=-
 
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs_task_execution_role"
